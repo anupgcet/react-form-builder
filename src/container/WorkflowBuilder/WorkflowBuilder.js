@@ -55,7 +55,8 @@ class WorkflowBuilder extends React.Component {
     mobileOpen: false,
     activeTaskIndex : 0,
     tasks : [
-    ]
+    ],
+    flow : [[]]
   };
 
   handleDrawerToggle = () => {
