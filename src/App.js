@@ -186,7 +186,7 @@ class ResponsiveDrawer extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Workflow Builder
+              Workflow test Builder
             </Typography>
           </Toolbar>
         </AppBar>
