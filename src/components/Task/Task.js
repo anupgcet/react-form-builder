@@ -4,20 +4,22 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
-import Field from '../Field/Field'
+import TextField from '@material-ui/core/TextField';
+
+import Field from '../Field/Field';
+import TaskCard from '../TaskCard/TaskCard';
 
 const styles = theme => ({
     formControl: {
       margin: theme.spacing.unit,
-      minWidth: 120,
+      minWidth: 250,
       border: '1px solid #E7E8EA'
     },
-    margin: {
-      margin: theme.spacing.unit * 2,
-    },
-    padding: {
-      padding: `0 ${theme.spacing.unit * 2}px`,
-    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 220,
+      }
   });
 
 class Task extends Component{
@@ -25,9 +27,28 @@ class Task extends Component{
         const { classes, theme } = this.props;
         return(
             <FormControl index={this.props.index} className={classes.formControl} onClick={this.props.onClick}>
-            <AppBar position="static" className={classes.margin}>
+            <AppBar position="static">
               <Tab label={this.props.taskLabel} />
             </AppBar>
+            <TextField
+          id="standard-select-currency-native"
+          select
+          label="Task Sequence"
+          className={classes.textField}
+          SelectProps={{
+            native: true,
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          helperText="Please select Task Sequence"
+          margin="normal"
+        >
+          <option value="" />
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+        </TextField>
             <Field fields={this.props.fields}/>
             </FormControl>
         )

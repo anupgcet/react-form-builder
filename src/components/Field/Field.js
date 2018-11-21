@@ -7,7 +7,7 @@ const styles = theme => ({
     textField: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
-      width: 200,
+      width: 220,
     }
   });
 
@@ -24,7 +24,7 @@ class Field extends Component{
                  key={index}
                  label={item.label}
                  className={classes.textField}
-                 value={item.value}
+                 defaultValue={item.value}
                  margin="normal"
                />
              );
