@@ -41,8 +41,11 @@ class Field extends Component{
                  margin="normal"
                />
              );
+
+             case 'default':
+              return null;
             }
-             
+             return null;
            })
            return fields;
     }
