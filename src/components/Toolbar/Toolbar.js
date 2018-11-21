@@ -8,6 +8,7 @@ import LibraryAdd from '@material-ui/icons/LibraryAdd';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
 
 const drawerWidth = 240;
 
@@ -56,6 +57,7 @@ class Toolbar extends Component{
               ))}
             </List>
             <Divider />
+            <Hidden smUp={this.props.showTaskToolabr} implementation="css">
             <List>
                 <ListItem 
                    button key="Add Assignee"
@@ -76,6 +78,7 @@ class Toolbar extends Component{
                   <ListItemText primary="Add Due Date"/>
                 </ListItem>
             </List>
+            </Hidden>
           </div>
         );
         return toolbar;
