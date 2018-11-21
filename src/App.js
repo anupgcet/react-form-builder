@@ -15,8 +15,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import LibraryAdd from '@material-ui/icons/LibraryAdd';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
+import Task from './components/Task/Task';
+
 
 const drawerWidth = 240;
 
@@ -60,12 +60,19 @@ const styles = theme => ({
     minWidth: 120,
     border: '1px solid #E7E8EA'
   },
+  margin: {
+    margin: theme.spacing.unit * 2,
+  },
+  padding: {
+    padding: `0 ${theme.spacing.unit * 2}px`,
+  },
 });
 
 class ResponsiveDrawer extends React.Component {
   state = {
     mobileOpen: false,
-    fields : [
+    activeTaskIndex : 0,
+    tasks : [
     ]
   };
 
@@ -73,34 +80,60 @@ class ResponsiveDrawer extends React.Component {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  addTask = () => {
+    const tasks = this.state.tasks;
+    tasks.push({
+      label : 'Task ',
+      fields : []
+    })
+    this.setState(state => ({ tasks: tasks}));
+  };
+
   addAssignee = () => {
-    const added = this.state.fields;
-    added.push({
+    const tasks = this.state.tasks;
+    const fields = tasks[this.state.activeTaskIndex].fields
+    fields.push({
       type : 'text',
       label : 'Assignee',
       value : 'Test Everything'
     })
-    this.setState(state => ({ fields: added}));
+    this.setState(state => {
+      return { tasks : tasks};
+    }
+      );
   };
 
   addField = () => {
-    const added = this.state.fields;
-    added.push({
+    const tasks = this.state.tasks;
+    const fields = tasks[this.state.activeTaskIndex].fields
+    fields.push({
       type : 'text',
       label : 'Comment',
       value : 'Test Comment'
     })
-    this.setState(state => ({ fields: added}));
+    this.setState(state => {
+      return { tasks : tasks};
+    }
+      );
   };
 
   addDate = () => {
-    const added = this.state.fields;
-    added.push({
+    const tasks = this.state.tasks;
+    const fields = tasks[this.state.activeTaskIndex].fields
+    fields.push({
       type : 'date',
       label : 'Due Date'
     })
-    this.setState(state => ({ fields: added}));
+    this.setState(state => {
+      return { tasks : tasks};
+    }
+      );
   };
+
+  updateActiveTaskIndex = (event) => {
+    const index = parseInt(event.currentTarget.attributes["index"].value);
+    this.setState(state => ({ activeTaskIndex: index}));
+  }
 
   render() {
     const { classes, theme } = this.props;
@@ -111,7 +144,7 @@ class ResponsiveDrawer extends React.Component {
         <Divider />
         <List>
           {['Add Task'].map((text, index) => (
-            <ListItem button key={text}>
+            <ListItem button key={text}  onClick={this.addTask}>
               <LibraryAdd />
               <ListItemText primary={text} />
             </ListItem>
@@ -141,35 +174,16 @@ class ResponsiveDrawer extends React.Component {
       </div>
     );
 
-    const fields = this.state.fields.map((item,index)=>{
-     switch(item.type){
-       case 'text' :
-       return (
-        
-        <TextField
-          id="standard-name"
-          key={index}
-          label={item.label}
-          className={classes.textField}
-          value={item.value}
-          margin="normal"
-        />
-      );
-      case 'date' :
-       return (
-        
-        <TextField
-          id="standard-name"
-          key={index}
-          label={item.label}
-          type="date"
-          className={classes.textField}
-          defaultValue={new Date().toISOString().substr(0,10)}
-          margin="normal"
-        />
-      );
-     }
-      
+    const tasks = this.state.tasks.map((task, index)=>{
+      return (
+      <Task 
+         onClick={this.updateActiveTaskIndex} 
+         taskLabel={task.label+index} 
+         fields={task.fields}
+         key={index}
+         index={index}
+         />
+      )
     })
 
     return (
@@ -186,7 +200,7 @@ class ResponsiveDrawer extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Workflow test Builder
+              Workflow Builder
             </Typography>
           </Toolbar>
         </AppBar>
@@ -223,9 +237,7 @@ class ResponsiveDrawer extends React.Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <FormControl className={classes.formControl}>
-          {fields}
-          </FormControl>
+          {tasks}
         </main>
       </div>
     );
