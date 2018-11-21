@@ -69,7 +69,7 @@ class WorkflowBuilder extends React.Component {
           label : 'Task ',
           fields : []
         })
-        this.setState(state => ({ tasks: tasks}));
+        this.setState(state => ({ tasks: tasks, activeTaskIndex : (tasks.length-1)}));
       },
     
       addAssignee : () => {
@@ -180,7 +180,7 @@ class WorkflowBuilder extends React.Component {
               variant="permanent"
               open
             >
-               <WorkflowToolbar actions={this.actions}/>
+               <WorkflowToolbar showTaskToolabr={this.state.tasks.length <=0 } actions={this.actions}/>
             </Drawer>
           </Hidden>
         </nav>
