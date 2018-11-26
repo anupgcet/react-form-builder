@@ -5,9 +5,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import Field from '../Field/Field';
-import TaskCard from '../TaskCard/TaskCard';
 
 const styles = theme => ({
     formControl: {
@@ -19,16 +22,38 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
         width: 220,
-      }
+      },
+      grow: {
+        flexGrow: 1,
+      },
   });
 
 class Task extends Component{
     render(){
         const { classes, theme } = this.props;
+        const color = this.props.active ? "secondary" : "primary";
+        const fieldRef = {
+          label : this.props.taskLabel,
+          taskIndex : this.props.index,
+          type: "task"
+        }
         return(
-            <FormControl index={this.props.index} className={classes.formControl} onClick={this.props.onClick}>
-            <AppBar position="static">
-              <Tab label={this.props.taskLabel} />
+            <FormControl index={this.props.index} className={classes.formControl}>
+            <AppBar position="static" color={color}>
+            <Toolbar>
+            <Typography variant="h6" color="inherit" className={classes.grow} onClick={
+              () => {this.props.onClick(this.props.index);this.props.fieldEditor('right', true, fieldRef);}
+              }>
+            {this.props.taskLabel}
+            </Typography>
+              <IconButton
+              aria-owns="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+                >
+                  <DeleteForeverIcon onClick={() => this.props.onDelete(this.props.index)}/>
+              </IconButton>
+              </Toolbar>
             </AppBar>
             <TextField
           id="standard-select-currency-native"
@@ -49,7 +74,7 @@ class Task extends Component{
             <option value={2}>2</option>
             <option value={3}>3</option>
         </TextField>
-            <Field fields={this.props.fields}/>
+            <Field fields={this.props.fields} fieldEditor={this.props.fieldEditor} taskIndex={this.props.index}/>
             </FormControl>
         )
     }
