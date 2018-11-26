@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import Task from '../../components/Task/Task';
 import WorkflowToolbar from '../../components/Toolbar/Toolbar';
-
+import FieldEditor from '../FieldEditor/FieldEditor';
 
 const drawerWidth = 240;
 
@@ -56,7 +56,8 @@ class WorkflowBuilder extends React.Component {
     activeTaskIndex : 0,
     tasks : [
     ],
-    flow : [[]]
+    flow : [[]],
+    fieldRef : null
   };
 
   handleDrawerToggle = () => {
@@ -65,10 +66,14 @@ class WorkflowBuilder extends React.Component {
 
   actions = {
     addTask : () => {
-        const tasks = this.state.tasks;
+        const tasks = this.state.tasks.map((item,index)=>{
+          item.active = false;
+          return item;
+        });
         tasks.push({
-          label : 'Task ',
-          fields : []
+          label : 'Task '+tasks.length,
+          fields : [],
+          active : true
         })
         this.setState(state => ({ tasks: tasks, activeTaskIndex : (tasks.length-1)}));
       },
@@ -112,15 +117,55 @@ class WorkflowBuilder extends React.Component {
           return { tasks : tasks};
         }
           );
+      },
+
+      deleteTask : (taskIndex) => {
+        let tasks = [...this.state.tasks];
+        tasks.splice(taskIndex,1);
+        const  activeTaskIndex = tasks.length - 1;
+          tasks = tasks.map((item,index)=>{
+            if(activeTaskIndex == index){
+              item.active = true;
+            }else{
+              item.active = false;
+            }
+            return item;
+          });
+        
+        this.setState(state => ({ tasks: tasks, activeTaskIndex: activeTaskIndex}));
+      },
+  }
+
+
+  updateActiveTaskIndex = (taskIndex) => {
+    const tasks = this.state.tasks.map((item,index)=>{
+      if(taskIndex == index){
+        item.active = true;
+      }else{
+        item.active = false;
       }
+      return item;
+    });
+    this.setState(state => ({ activeTaskIndex: taskIndex}));
   }
 
-
-  updateActiveTaskIndex = (event) => {
-    const index = parseInt(event.currentTarget.attributes["index"].value);
-    this.setState(state => ({ activeTaskIndex: index}));
+  toggleDrawer = (side, open, fieldRef) => {
+    this.setState({
+      [side]: open,
+      fieldRef:fieldRef
+    });
+  };
+  
+  fieldChange = (event, fieldId, fieldRef, type) => {
+    let tasks = [...this.state.tasks];
+    let field = tasks[fieldRef.taskIndex];
+    if('field' == type){
+      field = field.fields[fieldRef.index];
+    }
+    field[fieldId] = event.currentTarget.value;
+    this.setState(state => ({ tasks: tasks}));
   }
-
+  
   render() {
     const { classes, theme } = this.props;
 
@@ -128,16 +173,20 @@ class WorkflowBuilder extends React.Component {
       return (
       <Task 
          onClick={this.updateActiveTaskIndex} 
-         taskLabel={task.label+index} 
+         taskLabel={task.label} 
          fields={task.fields}
+         fieldEditor={this.toggleDrawer}
          key={index}
          index={index}
+         active={task.active}
+         onDelete={this.actions.deleteTask}
          />
       )
     })
 
     return (
       <div className={classes.root}>
+      
         <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
@@ -149,7 +198,7 @@ class WorkflowBuilder extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography variant="display1" color="inherit" noWrap position="center">
               Workflow Builder
             </Typography>
           </Toolbar>
@@ -189,6 +238,14 @@ class WorkflowBuilder extends React.Component {
           <div className={classes.toolbar} />
           {tasks}
         </main>
+        <Drawer anchor="right" open={this.state.right} onClose={()=>this.toggleDrawer('right', false, this.state.fieldRef)}>
+          <div
+            tabIndex={0}
+            role="button"
+          >
+            <FieldEditor fieldChange={this.fieldChange} fieldRef={this.state.fieldRef}/>
+          </div>
+        </Drawer>
       </div>
     );
   }
