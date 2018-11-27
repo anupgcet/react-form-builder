@@ -21,7 +21,8 @@ class Field extends Component{
             taskIndex : this.props.taskIndex,
             index : index,
             value : item.value,
-            type: "field"
+            type: "field",
+            fieldType:item.type
           }
 
           const fieldClick = () =>{
@@ -49,7 +50,7 @@ class Field extends Component{
                  type="date"
                  className={classes.textField}
                  onClick={fieldClick}
-                 value={new Date().toISOString().substr(0,10)}
+                 value={item.value}
                  margin="normal"
                />
              );

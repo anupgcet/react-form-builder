@@ -45,6 +45,7 @@ class FieldEditor extends Component{
         const { classes, theme } = this.props;
         const { create, approve, complete, reassign } = this.state;
         const isField = this.props.fieldRef.type === 'field';
+        const isDateField = this.props.fieldRef.fieldType === 'date';
 
         return(
             <FormControl index={this.props.index} className={classes.formControl} onClick={this.props.onClick}>
@@ -63,6 +64,7 @@ class FieldEditor extends Component{
               <TextField
                  id="value"
                  label="Value"
+                 type={isDateField ? 'date' : null}
                  className={classes.textField}
                  defaultValue={this.props.fieldRef.value}
                  onChange={(e)=>this.props.fieldChange(e, "value", this.props.fieldRef, this.props.fieldRef.type)}

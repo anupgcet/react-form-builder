@@ -118,7 +118,8 @@ class WorkflowBuilder extends React.Component {
         const fields = tasks[this.state.activeTaskIndex].fields
         fields.push({
           type : 'date',
-          label : 'Due Date'
+          label : 'Due Date',
+          value : new Date().toISOString().substr(0,10)
         })
         this.setState(state => {
           return { tasks : tasks};
