@@ -68,14 +68,15 @@ class Task extends Component{
           }}
           helperText="Please select Task Sequence"
           margin="normal"
+          onClick={()=>this.props.onClick(this.props.index)}
         >
           <option value="" />
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
         </TextField>
-            <Field fields={this.props.fields} fieldEditor={this.props.fieldEditor} taskIndex={this.props.index}/>
-            </FormControl>
+            <Field fields={this.props.fields} fieldEditor={this.props.fieldEditor} updateActiveIndex={this.props.onClick} taskIndex={this.props.index}/>
+          </FormControl>
         )
     }
 }
