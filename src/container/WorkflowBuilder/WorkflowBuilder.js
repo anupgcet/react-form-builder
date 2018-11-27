@@ -180,6 +180,7 @@ class WorkflowBuilder extends React.Component {
          index={index}
          active={task.active}
          onDelete={this.actions.deleteTask}
+         click={this.updateActiveTaskIndex}
          />
       )
     })

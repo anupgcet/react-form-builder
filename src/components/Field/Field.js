@@ -12,40 +12,35 @@ const styles = theme => ({
   });
 
 class Field extends Component{
-    myRef = React.createRef();
     render(){
         const { classes, theme } = this.props;
         const fields = this.props.fields.map((item,index)=>{
-          const fieldRef = {
-            label : item.label,
-            taskIndex : this.props.taskIndex,
-            index : index,
-            value : item.value,
-            type: "field"
-          }
             switch(item.type){
               case 'text' :
               return (
+               
                <TextField
+                 id="standard-name"
                  key={index}
                  label={item.label}
                  className={classes.textField}
-                 onClick={()=>this.props.fieldEditor('right', true, fieldRef)}
-                 value={item.value}
+                 defaultValue={item.value}
                  margin="normal"
+                 onClick= { () => this.props.click(this.props.taskIndex)}
                />
              );
              case 'date' :
               return (
                
                <TextField
+                 id="standard-name"
                  key={index}
                  label={item.label}
                  type="date"
                  className={classes.textField}
-                 onClick={()=>this.props.fieldEditor('right', true, fieldRef)}
-                 value={new Date().toISOString().substr(0,10)}
+                 defaultValue={new Date().toISOString().substr(0,10)}
                  margin="normal"
+                 onClick= { () => this.props.click(this.props.taskIndex)}
                />
              );
 
@@ -65,3 +60,4 @@ Field.propTypes = {
     theme: PropTypes.object.isRequired,
   };
 export default withStyles(styles, { withTheme: true })(Field);
+

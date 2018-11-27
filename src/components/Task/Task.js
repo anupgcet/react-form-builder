@@ -74,7 +74,7 @@ class Task extends Component{
             <option value={2}>2</option>
             <option value={3}>3</option>
         </TextField>
-            <Field fields={this.props.fields} fieldEditor={this.props.fieldEditor} taskIndex={this.props.index}/>
+            <Field fields={this.props.fields} fieldEditor={this.props.fieldEditor} taskIndex={this.props.index} click={this.props.click}/>
             </FormControl>
         )
     }
