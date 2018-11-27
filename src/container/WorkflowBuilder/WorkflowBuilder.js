@@ -11,10 +11,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 
 import MenuIcon from '@material-ui/icons/Menu';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import Task from '../../components/Task/Task';
 import WorkflowToolbar from '../../components/Toolbar/Toolbar';
-import FieldEditor from '../FieldEditor/FieldEditor';
+import FieldContainer from '../FieldContainer/FieldContainer';
 
 const drawerWidth = 240;
 
@@ -44,10 +45,16 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
   },
+  rightDrawer: {
+    maxWidth: 400,
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
-  }
+  },
+  grow: {
+    flexGrow: 1,
+  },
 });
 
 class WorkflowBuilder extends React.Component {
@@ -198,9 +205,19 @@ class WorkflowBuilder extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="display1" color="inherit" noWrap position="center">
+            <Typography variant="display1" color="inherit" noWrap className={classes.grow}>
               Workflow Builder
             </Typography>
+            <IconButton
+              aria-owns="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+                >
+                  <VisibilityIcon onClick={() => this.toggleDrawer("right", true, {
+                    type : 'json',
+                    tasks : this.state.tasks
+                  })}/>
+              </IconButton>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
@@ -238,12 +255,17 @@ class WorkflowBuilder extends React.Component {
           <div className={classes.toolbar} />
           {tasks}
         </main>
-        <Drawer anchor="right" open={this.state.right} onClose={()=>this.toggleDrawer('right', false, this.state.fieldRef)}>
+        <Drawer anchor="right" 
+               open={this.state.right} 
+               onClose={()=>this.toggleDrawer('right', false, this.state.fieldRef)}
+               classes={{
+                paper: classes.rightDrawer,
+              }}>
           <div
             tabIndex={0}
             role="button"
           >
-            <FieldEditor fieldChange={this.fieldChange} fieldRef={this.state.fieldRef}/>
+            <FieldContainer fieldChange={this.fieldChange} fieldRef={this.state.fieldRef}/>
           </div>
         </Drawer>
       </div>
