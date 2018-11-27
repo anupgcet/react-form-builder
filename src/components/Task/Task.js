@@ -31,7 +31,7 @@ const styles = theme => ({
 class Task extends Component{
     render(){
         const { classes, theme } = this.props;
-        const color = this.props.active ? "secondary" : "primary";
+        const color = this.props.active ? "primary" : "default";
         const fieldRef = {
           label : this.props.taskLabel,
           taskIndex : this.props.index,
@@ -39,6 +39,7 @@ class Task extends Component{
         }
         return(
             <FormControl index={this.props.index} className={classes.formControl}>
+            
             <AppBar position="static" color={color}>
             <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow} onClick={
@@ -56,21 +57,22 @@ class Task extends Component{
               </Toolbar>
             </AppBar>
             <TextField
-          id="standard-select-currency-native"
-          select
-          label="Task Sequence"
-          className={classes.textField}
-          SelectProps={{
-            native: true,
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select Task Sequence"
-          margin="normal"
-          onClick={()=>this.props.onClick(this.props.index)}
-        >
-          <option value="" />
+              id="standard-select-currency-native"
+              select
+              label="Task Sequence"
+              className={classes.textField}
+              SelectProps={{
+                native: true,
+                MenuProps: {
+                  className: classes.menu,
+                },
+              }}
+              defaultValue={1}
+              helperText="Please select Task Sequence"
+              margin="normal"
+              onClick={()=>this.props.onClick(this.props.index)}
+          >
+            <option value="" />
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>

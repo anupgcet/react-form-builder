@@ -21,7 +21,7 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    display: 'flex',
+    display: 'flex'
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -44,9 +44,11 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    backgroundColor: "rgb(244, 245, 247)",
+    color: "rgb(66, 82, 110)"
   },
   rightDrawer: {
-    maxWidth: 400,
+    minWidth: 300,
   },
   content: {
     flexGrow: 1,
@@ -61,6 +63,7 @@ class WorkflowBuilder extends React.Component {
   state = {
     mobileOpen: false,
     activeTaskIndex : 0,
+    taskCounter:0,
     tasks : [
     ],
     flow : [[]],
@@ -77,12 +80,14 @@ class WorkflowBuilder extends React.Component {
           item.active = false;
           return item;
         });
+        let taskCounter = this.state.taskCounter;
         tasks.push({
-          label : 'Task '+tasks.length,
+          label : 'Task '+ taskCounter,
           fields : [],
           active : true
         })
-        this.setState(state => ({ tasks: tasks, activeTaskIndex : (tasks.length-1)}));
+        taskCounter++;
+        this.setState(state => ({taskCounter: taskCounter, tasks: tasks, activeTaskIndex : (tasks.length-1)}));
       },
     
       addAssignee : () => {
@@ -129,8 +134,9 @@ class WorkflowBuilder extends React.Component {
 
       deleteTask : (taskIndex) => {
         let tasks = [...this.state.tasks];
+        let  activeTaskIndex = this.state.activeTaskIndex;
+        activeTaskIndex = activeTaskIndex == taskIndex || activeTaskIndex == tasks.length -1 ? tasks.length -2:activeTaskIndex;
         tasks.splice(taskIndex,1);
-        const  activeTaskIndex = tasks.length - 1;
           tasks = tasks.map((item,index)=>{
             if(activeTaskIndex == index){
               item.active = true;
@@ -237,7 +243,7 @@ class WorkflowBuilder extends React.Component {
                 keepMounted: true, // Better open performance on mobile.
               }}
             >
-              <WorkflowToolbar actions={this.actions}/>
+              <WorkflowToolbar showTaskToolabr={this.state.tasks.length <=0 } actions={this.actions}/>
             </Drawer>
           </Hidden>
           <Hidden xsDown implementation="css">

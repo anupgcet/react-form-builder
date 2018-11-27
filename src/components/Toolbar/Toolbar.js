@@ -8,7 +8,9 @@ import LibraryAdd from '@material-ui/icons/LibraryAdd';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import Hidden from '@material-ui/core/Hidden';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 const drawerWidth = 240;
 
@@ -16,23 +18,8 @@ const styles = theme => ({
   root: {
     display: 'flex',
   },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
-  },
-  menuButton: {
-    marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
+  nested: {
+    paddingLeft: theme.spacing.unit * 4,
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -55,30 +42,32 @@ class Toolbar extends Component{
                   <ListItemText primary={text} />
                 </ListItem>
               ))}
-            </List>
-            <Divider />
-            <Hidden smUp={this.props.showTaskToolabr} implementation="css">
-            <List>
+            <Collapse in={!this.props.showTaskToolabr} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
                 <ListItem 
                    button key="Add Assignee"
-                   onClick={this.props.actions.addAssignee}>
+                   onClick={this.props.actions.addAssignee}
+                   className={classes.nested}>
                    <PlaylistAdd />
                   <ListItemText primary="Add Assignee" />
                 </ListItem>
                 <ListItem 
                    button key="Add Field"
-                   onClick={this.props.actions.addField}>
+                   onClick={this.props.actions.addField}
+                   className={classes.nested}>
                   <PlaylistAdd />
                   <ListItemText primary="Add Field"/>
                 </ListItem>
                 <ListItem 
                    button key="Add Due Date"
-                   onClick={this.props.actions.addDate}>
+                   onClick={this.props.actions.addDate}
+                   className={classes.nested}>
                    <PlaylistAdd />
                   <ListItemText primary="Add Due Date"/>
                 </ListItem>
             </List>
-            </Hidden>
+            </Collapse>
+            </List>
           </div>
         );
         return toolbar;

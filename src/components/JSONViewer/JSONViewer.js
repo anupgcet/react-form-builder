@@ -12,6 +12,8 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+    backgroundColor: "rgb(244, 245, 247)",
+    color: "rgb(66, 82, 110)"
   },
 });
 
