@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
+import {prettifyJSON} from '../../util/jsonPrettier/jsonPrettier';
 
 const styles = theme => ({
   root: {
@@ -27,10 +28,10 @@ function JSONViewer(props) {
             </Typography>
         </AppBar>
         <br/>
+        <pre>
+        {prettifyJSON(props.fieldRef)}
+        </pre>
 
-        <Typography component="p">
-          {JSON.stringify(props.fieldRef.tasks)}
-        </Typography>
       </Paper>
     </div>
   );
