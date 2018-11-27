@@ -49,7 +49,7 @@ class FieldEditor extends Component{
         return(
             <FormControl index={this.props.index} className={classes.formControl} onClick={this.props.onClick}>
             <AppBar position="static">
-              <Tab label={"Edit "+this.props.fieldRef.label+" Field"} />
+              <Tab label={"Edit "+this.props.fieldRef.label+(isField?" Field":" Settings")} />
             </AppBar>
             <TextField
                  id="label"

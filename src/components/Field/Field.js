@@ -23,6 +23,11 @@ class Field extends Component{
             value : item.value,
             type: "field"
           }
+
+          const fieldClick = () =>{
+            this.props.fieldEditor('right', true, fieldRef);
+            this.props.updateActiveIndex(this.props.taskIndex);
+          }
             switch(item.type){
               case 'text' :
               return (
@@ -30,7 +35,7 @@ class Field extends Component{
                  key={index}
                  label={item.label}
                  className={classes.textField}
-                 onClick={()=>this.props.fieldEditor('right', true, fieldRef)}
+                 onClick={fieldClick}
                  value={item.value}
                  margin="normal"
                />
@@ -43,7 +48,7 @@ class Field extends Component{
                  label={item.label}
                  type="date"
                  className={classes.textField}
-                 onClick={()=>this.props.fieldEditor('right', true, fieldRef)}
+                 onClick={fieldClick}
                  value={new Date().toISOString().substr(0,10)}
                  margin="normal"
                />
