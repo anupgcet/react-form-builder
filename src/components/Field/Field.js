@@ -2,12 +2,19 @@ import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
+import AutoCompleteField from './AutoCompleteField'
 
 const styles = theme => ({
     textField: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
-      width: 220,
+      minWidth: 220,
+    },
+    root : {
+      display :"inline-flex"
     }
   });
 
@@ -22,7 +29,8 @@ class Field extends Component{
             index : index,
             value : item.value,
             type: "field",
-            fieldType:item.type
+            fieldType:item.type,
+            autoComplete: item.autoComplete
           }
 
           const fieldClick = () =>{
@@ -32,6 +40,7 @@ class Field extends Component{
             switch(item.type){
               case 'text' :
               return (
+                <div className={classes.root}>
                <TextField
                  key={index}
                  label={item.label}
@@ -40,10 +49,18 @@ class Field extends Component{
                  value={item.value}
                  margin="normal"
                />
+                <IconButton
+              aria-owns="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+                >
+                  <DeleteForeverIcon onClick={() => this.props.onDelete(this.props.taskIndex, index)}/>
+              </IconButton>
+               </div>
              );
              case 'date' :
               return (
-               
+              <div className={classes.root}>
                <TextField
                  key={index}
                  label={item.label}
@@ -53,7 +70,20 @@ class Field extends Component{
                  value={item.value}
                  margin="normal"
                />
+                <IconButton
+              aria-owns="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+                >
+                  <DeleteForeverIcon onClick={() => this.props.onDelete(this.props.taskIndex, index)}/>
+              </IconButton>
+              </div>
              );
+            
+             case 'autocomplete' :
+             return (
+               <AutoCompleteField field={fieldRef} fieldChange={this.props.fieldChange}/>
+             )
 
              case 'default':
               return null;

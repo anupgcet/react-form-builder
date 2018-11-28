@@ -16,6 +16,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import Task from '../../components/Task/Task';
 import WorkflowToolbar from '../../components/Toolbar/Toolbar';
 import FieldContainer from '../FieldContainer/FieldContainer';
+import {formBuilderConfig} from '../../config/formBuiderConfig/formBuiderConfig';
 
 const drawerWidth = 240;
 
@@ -90,41 +91,14 @@ class WorkflowBuilder extends React.Component {
         this.setState(state => ({taskCounter: taskCounter, tasks: tasks, activeTaskIndex : (tasks.length-1)}));
       },
     
-      addAssignee : () => {
+      addInputField : (operation) => {
         const tasks = this.state.tasks;
         const fields = tasks[this.state.activeTaskIndex].fields
         fields.push({
-          type : 'text',
-          label : 'Assignee',
-          value : 'Test Everything'
-        })
-        this.setState(state => {
-          return { tasks : tasks};
-        }
-          );
-      },
-    
-      addField : () => {
-        const tasks = this.state.tasks;
-        const fields = tasks[this.state.activeTaskIndex].fields
-        fields.push({
-          type : 'text',
-          label : 'Comment',
-          value : 'Test Comment'
-        })
-        this.setState(state => {
-          return { tasks : tasks};
-        }
-          );
-      },
-    
-      addDate : () => {
-        const tasks = this.state.tasks;
-        const fields = tasks[this.state.activeTaskIndex].fields
-        fields.push({
-          type : 'date',
-          label : 'Due Date',
-          value : new Date().toISOString().substr(0,10)
+          type : operation.inputType,
+          label : operation.defaultInputLabel,
+          value : operation.defaultInputValue,
+          autoComplete : operation.autoCompleteConfig
         })
         this.setState(state => {
           return { tasks : tasks};
@@ -132,11 +106,17 @@ class WorkflowBuilder extends React.Component {
           );
       },
 
-      deleteTask : (taskIndex) => {
+      deleteTask : (taskIndex, fieldIndex) => {
         let tasks = [...this.state.tasks];
         let  activeTaskIndex = this.state.activeTaskIndex;
-        activeTaskIndex = activeTaskIndex == taskIndex || activeTaskIndex == tasks.length -1 ? tasks.length -2:activeTaskIndex;
-        tasks.splice(taskIndex,1);
+        
+        if(fieldIndex != null){
+          tasks[taskIndex].fields.splice(fieldIndex,1);
+        }else{
+          activeTaskIndex = activeTaskIndex == taskIndex || activeTaskIndex == tasks.length -1 ? tasks.length -2:activeTaskIndex;
+          tasks.splice(taskIndex,1);
+        }
+        
           tasks = tasks.map((item,index)=>{
             if(activeTaskIndex == index){
               item.active = true;
@@ -194,6 +174,7 @@ class WorkflowBuilder extends React.Component {
          index={index}
          active={task.active}
          onDelete={this.actions.deleteTask}
+         fieldChange={this.fieldChange}
          />
       )
     })
@@ -213,7 +194,7 @@ class WorkflowBuilder extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="display1" color="inherit" noWrap className={classes.grow}>
-              Workflow Builder
+                {formBuilderConfig.appLabel}
             </Typography>
             <IconButton
               aria-owns="menu-appbar"
