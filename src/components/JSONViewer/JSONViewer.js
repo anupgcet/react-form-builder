@@ -21,8 +21,8 @@ function JSONViewer(props) {
   const { classes } = props;
 
   return (
-    <div>
-      <Paper className={classes.root} elevation={1}>
+    <div className={classes.root}>
+      <Paper  elevation={1}>
       <AppBar position="static" color="primary">
            
             <Typography variant="h6" color="inherit">

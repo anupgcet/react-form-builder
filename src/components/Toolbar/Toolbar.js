@@ -9,8 +9,7 @@ import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import {formBuilderConfig} from '../../config/formBuiderConfig/formBuiderConfig';
 
 const drawerWidth = 240;
 
@@ -36,37 +35,30 @@ class Toolbar extends Component{
             <div className={classes.toolbar} />
             <Divider />
             <List>
-              {['Add Task'].map((text, index) => (
-                <ListItem button key={text}  onClick={this.props.actions.addTask}>
-                  <LibraryAdd />
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            <Collapse in={!this.props.showTaskToolabr} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-                <ListItem 
-                   button key="Add Assignee"
-                   onClick={this.props.actions.addAssignee}
-                   className={classes.nested}>
-                   <PlaylistAdd />
-                  <ListItemText primary="Add Assignee" />
-                </ListItem>
-                <ListItem 
-                   button key="Add Field"
-                   onClick={this.props.actions.addField}
-                   className={classes.nested}>
-                  <PlaylistAdd />
-                  <ListItemText primary="Add Field"/>
-                </ListItem>
-                <ListItem 
-                   button key="Add Due Date"
-                   onClick={this.props.actions.addDate}
-                   className={classes.nested}>
-                   <PlaylistAdd />
-                  <ListItemText primary="Add Due Date"/>
-                </ListItem>
-            </List>
-            </Collapse>
+              {formBuilderConfig.operations.map((operation, index) => {
+                  const subMenu = operation.operations.map((operation,index) => (
+                      <ListItem 
+                       button key={operation.label}
+                        onClick={() => this.props.actions.addInputField(operation)}
+                        className={classes.nested}>
+                        <PlaylistAdd />
+                        <ListItemText primary={operation.label} />
+                        </ListItem>
+                      ));
+                return(
+                  <div>
+                    <ListItem button key={operation.label}  onClick={this.props.actions.addTask}>
+                      <LibraryAdd />
+                      <ListItemText primary={operation.label} />
+                    </ListItem>
+                    <Collapse in={!this.props.showTaskToolabr} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                    {subMenu}
+                    </List>
+                    </Collapse>
+                  </div>
+                )
+              })}
             </List>
           </div>
         );
