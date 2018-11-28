@@ -12,8 +12,12 @@ import Hidden from '@material-ui/core/Hidden';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
+import DescriptionIcon from '@material-ui/icons/Description';
+
 
 import Task from '../../components/Task/Task';
+import TaskGraphical from '../../components/TaskGraphical/TaskGraphical';
 import WorkflowToolbar from '../../components/Toolbar/Toolbar';
 import FieldContainer from '../FieldContainer/FieldContainer';
 import {formBuilderConfig} from '../../config/formBuiderConfig/formBuiderConfig';
@@ -68,7 +72,8 @@ class WorkflowBuilder extends React.Component {
     tasks : [
     ],
     flow : [[]],
-    fieldRef : null
+    fieldRef : null,
+    graphicalView : true,
   };
 
   handleDrawerToggle = () => {
@@ -149,6 +154,10 @@ class WorkflowBuilder extends React.Component {
       fieldRef:fieldRef
     });
   };
+
+  toggleView = () => {
+    this.setState(state => ({ graphicalView: !this.state.graphicalView}))
+  };
   
   fieldChange = (event, fieldId, fieldRef, type) => {
     let tasks = [...this.state.tasks];
@@ -163,7 +172,7 @@ class WorkflowBuilder extends React.Component {
   render() {
     const { classes, theme } = this.props;
 
-    const tasks = this.state.tasks.map((task, index)=>{
+    const tasks = this.state.graphicalView ? this.state.tasks.map((task, index)=>{
       return (
       <Task 
          onClick={this.updateActiveTaskIndex} 
@@ -176,6 +185,19 @@ class WorkflowBuilder extends React.Component {
          onDelete={this.actions.deleteTask}
          fieldChange={this.fieldChange}
          />
+      )
+    }) :
+    this.state.tasks.map((task, index)=>{
+      return (
+        <TaskGraphical onClick={this.updateActiveTaskIndex} 
+        taskLabel={task.label} 
+        fields={task.fields}
+        fieldEditor={this.toggleDrawer}
+        key={index}
+        index={index}
+        active={task.active}
+        onDelete={this.actions.deleteTask}
+        fieldChange={this.fieldChange}/>
       )
     })
 
@@ -196,6 +218,16 @@ class WorkflowBuilder extends React.Component {
             <Typography variant="display1" color="inherit" noWrap className={classes.grow}>
                 {formBuilderConfig.appLabel}
             </Typography>
+            <IconButton
+              aria-owns="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+                >
+                  {this.state.graphicalView?
+                    <PermMediaIcon onClick={this.toggleView}/> : 
+                    <DescriptionIcon onClick={this.toggleView}/>
+                  }
+            </IconButton>
             <IconButton
               aria-owns="menu-appbar"
               aria-haspopup="true"

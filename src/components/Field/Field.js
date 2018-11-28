@@ -38,7 +38,6 @@ class Field extends Component{
           }
             switch(item.type){
               case 'text' :
-              case 'date' :
               case 'autocomplete' :
               return (
                 <div className={classes.root}>
@@ -59,6 +58,26 @@ class Field extends Component{
               </IconButton>
                </div>
              );
+             case 'date' :
+             return (
+               <div className={classes.root}>
+              <TextField
+                key={index}
+                label={item.label}
+                className={classes.textField}
+                onClick={fieldClick}
+                value={new Date(item.value).toLocaleDateString()}
+                margin="normal"
+              />
+               <IconButton
+             aria-owns="menu-appbar"
+             aria-haspopup="true"
+             color="inherit"
+               >
+                 <DeleteForeverIcon onClick={() => this.props.onDelete(this.props.taskIndex, index)}/>
+             </IconButton>
+              </div>
+            );
              case 'default':
               return null;
             }
