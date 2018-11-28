@@ -9,8 +9,7 @@ import AutoCompleteField from './AutoCompleteField'
 
 const styles = theme => ({
     textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
+      margin: theme.spacing.unit,
       minWidth: 220,
     },
     root : {
@@ -39,6 +38,8 @@ class Field extends Component{
           }
             switch(item.type){
               case 'text' :
+              case 'date' :
+              case 'autocomplete' :
               return (
                 <div className={classes.root}>
                <TextField
@@ -58,33 +59,6 @@ class Field extends Component{
               </IconButton>
                </div>
              );
-             case 'date' :
-              return (
-              <div className={classes.root}>
-               <TextField
-                 key={index}
-                 label={item.label}
-                 type="date"
-                 className={classes.textField}
-                 onClick={fieldClick}
-                 value={item.value}
-                 margin="normal"
-               />
-                <IconButton
-              aria-owns="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-                >
-                  <DeleteForeverIcon onClick={() => this.props.onDelete(this.props.taskIndex, index)}/>
-              </IconButton>
-              </div>
-             );
-            
-             case 'autocomplete' :
-             return (
-               <AutoCompleteField field={fieldRef} fieldChange={this.props.fieldChange}/>
-             )
-
              case 'default':
               return null;
             }

@@ -10,6 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import AutoCompleteField from '../Field/AutoCompleteField';
 
 const styles = theme => ({
     formControl: {
@@ -20,12 +21,11 @@ const styles = theme => ({
     formGroup: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width: 270,
+        minwidth: 270,
       },
       textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 270,
+        margin: theme.spacing.unit,
+        minwidth: 270,
       }
   });
 
@@ -45,7 +45,42 @@ class FieldEditor extends Component{
         const { classes, theme } = this.props;
         const { create, approve, complete, reassign } = this.state;
         const isField = this.props.fieldRef.type === 'field';
-        const isDateField = this.props.fieldRef.fieldType === 'date';
+
+        let valueField = "";
+        if(this.props.fieldRef.type === 'field'){
+          switch(this.props.fieldRef.fieldType){
+            case 'text' :
+            valueField =  (
+              <TextField
+                 id="value"
+                 label="Value"
+                 className={classes.textField}
+                 defaultValue={this.props.fieldRef.value}
+                 onChange={(e)=>this.props.fieldChange(e, "value", this.props.fieldRef, this.props.fieldRef.type)}
+                 margin="normal"
+               />
+           );
+           break;
+           case 'date' :
+           valueField = (<TextField
+                 id="value"
+                 label="Value"
+                 type="date"
+                 className={classes.textField}
+                 defaultValue={this.props.fieldRef.value}
+                 onChange={(e)=>this.props.fieldChange(e, "value", this.props.fieldRef, this.props.fieldRef.type)}
+                 margin="normal"
+               />)
+               break;
+           case 'autocomplete' :
+           valueField =  (
+            <AutoCompleteField field={this.props.fieldRef} fieldChange={this.props.fieldChange}/>
+           )
+            break;
+           case 'default':
+            return null;
+          }
+        }
 
         return(
             <FormControl index={this.props.index} className={classes.formControl} onClick={this.props.onClick}>
@@ -60,17 +95,7 @@ class FieldEditor extends Component{
                  onChange={(e)=>this.props.fieldChange(e, "label", this.props.fieldRef, this.props.fieldRef.type)}
                  margin="normal"
                />
-             {isField && (
-              <TextField
-                 id="value"
-                 label="Value"
-                 type={isDateField ? 'date' : null}
-                 className={classes.textField}
-                 defaultValue={this.props.fieldRef.value}
-                 onChange={(e)=>this.props.fieldChange(e, "value", this.props.fieldRef, this.props.fieldRef.type)}
-                 margin="normal"
-               />
-             )}
+             {valueField}
                
             <FormLabel component="legend">Appearance</FormLabel>
           <FormGroup className={classes.formGroup}>

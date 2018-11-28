@@ -15,11 +15,8 @@ import {formBuilderConfig} from '../../config/formBuiderConfig/formBuiderConfig'
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    marginTop: 2*theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-    width: 220,
+    margin: theme.spacing.unit,
+    minWidth: 220,
   },
   input: {
     display: 'flex',
@@ -149,16 +146,21 @@ const components = {
 
 class AutoCompleteField extends React.Component {
 
+  value = {
+    label : this.props.field.value,
+    value: this.props.field.value,
+  }
+
   handleChange =  (e) =>  {
     const obj = {
       currentTarget : e
     }
+    this.value = e;
     this.props.fieldChange(obj, "value", this.props.field, this.props.field.type);
   };
 
   render() {
     const { classes, theme } = this.props;
-
     const selectStyles = {
       input: base => ({
         ...base,
@@ -183,10 +185,7 @@ class AutoCompleteField extends React.Component {
             }}
             options={formBuilderConfig.autoCompleteConfig[this.props.field.autoComplete].values}
             components={components}
-            value={{
-              label : this.props.field.value,
-              value: this.props.field.value,
-            }}
+            value={this.value}
             onChange={this.handleChange}
             placeholder={"Search "+this.props.field.label}
           />
